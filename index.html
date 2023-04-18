@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Room Booking App</title>
+    <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-database.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDVZgeT8AmxK_Pz_gq3c-yH2QJGdS9X7nQ",
+            authDomain: "room-booking-app.firebaseapp.com",
+            databaseURL: "https://room-booking-app.firebaseio.com",
+            projectId: "room-booking-app",
+            storageBucket: "room-booking-app.appspot.com",
+            messagingSenderId: "1040275026900",
+            appId: "1:1040275026900:web:d3d13b374765e8e3c3d9b3"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <script>
+        const dbRef = firebase.database().ref();
+        const roomsRef = dbRef.child('rooms');
+
+        let roomA, roomB, roomC, roomD, roomE;
+ 
+        // disable the button and check if room is booked
+        function checkRoomBooking() {
+            roomsRef.on('value', snap => {
+                roomA = snap.child('roomA').val();
+                roomB = snap.child('roomB').val();
+                roomC = snap.child('roomC').val();
+                roomD = snap.child('roomD').val();
+                roomE = snap.child('roomE').val();
+
+                if (roomA) {
+                    document.getElementById("btnRoomA").disabled = true;
+                }
+                if (roomB) {
+                    document.getElementById("btnRoomB").disabled = true;
+                }
+                if (roomC) {
+                    document.getElementById("btnRoomC").disabled = true;
+                }
+                if (roomD) {
+                    document.getElementById("btnRoomD").disabled = true;
+                }
+                if (roomE) {
+                    document.getElementById("btnRoomE").disabled = true;
+                }
+            })
+        };
+
+        // book the room
+        function bookRoom(name, email, room) {
+            let data = {
+                name: name,
+                email: email
+            };
+            roomsRef.child(room).update(data);
+            document.getElementById("message-modal").style.display = 'block';
+        };
+    </script>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .modal-close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body onload="checkRoomBooking()">
+    <h1>Room Booking App</h1>
+    <form>
+        <label>Name:</label>
+        <input id="name" type="text" required>
+        <label>Email:</label>
+        <input id="email" type="email" required>
+    </form>
+    <div>
+        <button id="btnRoomA" onclick="bookRoom(document.getElementById('name').value, document.getElementById('email').value, 'roomA')">Room A</button>
+        <button id="btnRoomB" onclick="bookRoom(document.getElementById('name').value, document.getElementById('email').value, 'roomB')">Room B</button>
+        <button id="btnRoomC" onclick="bookRoom(document.getElementById('name').value, document.getElementById('email').value, 'roomC')">Room C</button>
+        <button id="btnRoomD" onclick="bookRoom(document.getElementById('name').value, document.getElementById('email').value, 'roomD')">Room D</button>
+        <button id="btnRoomE" onclick="bookRoom(document.getElementById('name').value, document.getElementById('email').value, 'roomE')">Room E</button>
+    </div>
+    <div id="message-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h3>Success</h3>
+            <p>Your room booking is complete.</p>
+        </div>
+    </div>
+    <script>
+        // close button for modal popup
+        var modalClose = document.getElementsByClassName("modal-close")[0];
+        modalClose.onclick = function () {
+            document.getElementById("message-modal").style.display = 'none';
+        }
+    </script>
+</body>
+</html>
