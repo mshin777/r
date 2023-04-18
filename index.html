@@ -1,132 +1,148 @@
+
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Room Booking App</title>
-    <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.14.4/firebase-database.js"></script>
-    <script>
-        // Your web app's Firebase configuration
-        var firebaseConfig = {
-            apiKey: "AIzaSyDVZgeT8AmxK_Pz_gq3c-yH2QJGdS9X7nQ",
-            authDomain: "room-booking-app.firebaseapp.com",
-            databaseURL: "https://room-booking-app.firebaseio.com",
-            projectId: "room-booking-app",
-            storageBucket: "room-booking-app.appspot.com",
-            messagingSenderId: "1040275026900",
-            appId: "1:1040275026900:web:d3d13b374765e8e3c3d9b3"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-    </script>
-    <script>
-        const dbRef = firebase.database().ref();
-        const roomsRef = dbRef.child('rooms');
-
-        let roomA, roomB, roomC, roomD, roomE;
- 
-        // disable the button and check if room is booked
-        function checkRoomBooking() {
-            roomsRef.on('value', snap => {
-                roomA = snap.child('roomA').val();
-                roomB = snap.child('roomB').val();
-                roomC = snap.child('roomC').val();
-                roomD = snap.child('roomD').val();
-                roomE = snap.child('roomE').val();
-
-                if (roomA) {
-                    document.getElementById("btnRoomA").disabled = true;
-                }
-                if (roomB) {
-                    document.getElementById("btnRoomB").disabled = true;
-                }
-                if (roomC) {
-                    document.getElementById("btnRoomC").disabled = true;
-                }
-                if (roomD) {
-                    document.getElementById("btnRoomD").disabled = true;
-                }
-                if (roomE) {
-                    document.getElementById("btnRoomE").disabled = true;
-                }
-            })
-        };
-
-        // book the room
-        function bookRoom(name, email, room) {
-            let data = {
-                name: name,
-                email: email
+	<head>
+    	<title>Room Booking App</title>
+        <!-- Firebase App is needed to use Firebase Database -->
+        <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
+        <!-- Firebase Database -->
+        <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-database.js"></script>
+        <script>
+            // Your web app's Firebase configuration
+            var firebaseConfig = {
+                apiKey: "AIzaSyCbT1_sK2FtA_eoG8lhW-kz9QVkfI6vjDo",
+                authDomain: "room-booking-app-b8e90.firebaseapp.com",
+                databaseURL: "https://room-booking-app-b8e90.firebaseio.com",
+                projectId: "room-booking-app-b8e90",
+                storageBucket: "room-booking-app-b8e90.appspot.com",
+                messagingSenderId: "1050331725452",
+                appId: "1:1050331725452:web:e9c8a8cfdaf489d2a2fd86",
+                measurementId: "G-XV3GH3Y1D2"
             };
-            roomsRef.child(room).update(data);
-            document.getElementById("message-modal").style.display = 'block';
-        };
-    </script>
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            padding-top: 100px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0, 0, 0);
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-
-        .modal-close {
-            color: #aaaaaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .modal-close:hover,
-        .modal-close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body onload="checkRoomBooking()">
-    <h1>Room Booking App</h1>
-    <form>
-        <label>Name:</label>
-        <input id="name" type="text" required>
-        <label>Email:</label>
-        <input id="email" type="email" required>
-    </form>
-    <div>
-        <button id="btnRoomA" onclick="bookRoom(document.getElementById('name').value, document.getElementById('email').value, 'roomA')">Room A</button>
-        <button id="btnRoomB" onclick="bookRoom(document.getElementById('name').value, document.getElementById('email').value, 'roomB')">Room B</button>
-        <button id="btnRoomC" onclick="bookRoom(document.getElementById('name').value, document.getElementById('email').value, 'roomC')">Room C</button>
-        <button id="btnRoomD" onclick="bookRoom(document.getElementById('name').value, document.getElementById('email').value, 'roomD')">Room D</button>
-        <button id="btnRoomE" onclick="bookRoom(document.getElementById('name').value, document.getElementById('email').value, 'roomE')">Room E</button>
-    </div>
-    <div id="message-modal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <h3>Success</h3>
-            <p>Your room booking is complete.</p>
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            // Get a reference to the database service
+            var database = firebase.database();
+        </script>
+	</head>
+	<body>
+    	<h1>Room Booking App</h1>
+        <p>We have 5 rooms. Please select the room you want to book.</p>
+        <div>
+            <button id="roomA" disabled>Room A</button>
+            <button id="roomB" disabled>Room B</button>
+            <button id="roomC" disabled>Room C</button>
+            <button id="roomD" disabled>Room D</button>
+            <button id="roomE" disabled>Room E</button>
         </div>
-    </div>
-    <script>
-        // close button for modal popup
-        var modalClose = document.getElementsByClassName("modal-close")[0];
-        modalClose.onclick = function () {
-            document.getElementById("message-modal").style.display = 'none';
-        }
-    </script>
-</body>
+        <!-- Modal -->
+        <div id="modal" style="display:none;">
+            <div>
+                <h3>Booking Confirmation</h3>
+                <p>Your booking is successful.</p>
+            </div>
+            <div>
+                <h3>Error</h3>
+                <p>Something went wrong. Please try again.</p>
+            </div>
+        </div>
+        <!-- Booking Form -->
+        <div id="bookingForm" style="display:none;">
+            <h3>Booking Form</h3>
+            <form>
+                <div>
+                    <label>Name:</label>
+                    <input type="text" id="name" name="name">
+                </div>
+                <div>
+                    <label>Email:</label>
+                    <input type="text" id="email" name="email">
+                </div>
+                <div>
+                    <input type="submit" value="Book Room">
+                </div>
+            </form>
+        </div>
+        <script type="text/javascript">
+            // Get the buttons
+            var roomA = document.getElementById('roomA');
+            var roomB = document.getElementById('roomB');
+            var roomC = document.getElementById('roomC');
+            var roomD = document.getElementById('roomD');
+            var roomE = document.getElementById('roomE');
+            // Check if the room is booked or not
+            function isBooked(room) {
+                var booked;
+                // Get the data from the database
+                firebase.database().ref('rooms/' + room).once('value').then(function(snapshot) {
+                    booked = snapshot.val().booked;
+                    // If the room is not booked, enable the button
+                    if (!booked) {
+                        document.getElementById(room).disabled = false;
+                    }
+                });
+            }
+            // Check for all the rooms
+            isBooked('roomA');
+            isBooked('roomB');
+            isBooked('roomC');
+            isBooked('roomD');
+            isBooked('roomE');
+            // Listen for button clicks
+            roomA.addEventListener('click', function() {
+                // Show the booking form
+                document.getElementById('bookingForm').style.display = 'block';
+            });
+            roomB.addEventListener('click', function() {
+                // Show the booking form
+                document.getElementById('bookingForm').style.display = 'block';
+            });
+            roomC.addEventListener('click', function() {
+                // Show the booking form
+                document.getElementById('bookingForm').style.display = 'block';
+            });
+            roomD.addEventListener('click', function() {
+                // Show the booking form
+                document.getElementById('bookingForm').style.display = 'block';
+            });
+            roomE.addEventListener('click', function() {
+                // Show the booking form
+                document.getElementById('bookingForm').style.display = 'block';
+            });
+            // Listen for form submission
+            document.querySelector('form').addEventListener('submit', function(e) {
+                // Prevent default behavior
+                e.preventDefault();
+                // Get the values from the form
+                var name = document.getElementById('name').value;
+                var email = document.getElementById('email').value;
+                // Find the room to book
+                if (roomA.disabled == false) {
+                    var room = 'roomA';
+                }
+                else if (roomB.disabled == false) {
+                    var room = 'roomB';
+                }
+                else if (roomC.disabled == false) {
+                    var room = 'roomC';
+                }
+                else if (roomD.disabled == false) {
+                    var room = 'roomD';
+                }
+                else if (roomE.disabled == false) {
+                    var room = 'roomE';
+                }
+                // Book the room
+                firebase.database().ref('rooms/' + room).set({
+                    booked: true,
+                    user: {
+                        name: name,
+                        email: email
+                    }
+                });
+                // Show the modal
+                document.getElementById('modal').style.display = 'block';
+            });
+        </script>
+	</body>
 </html>
