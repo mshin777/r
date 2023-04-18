@@ -4,23 +4,22 @@
 	<head>
     	<title>Room Booking App</title>
         <!-- Firebase App is needed to use Firebase Database -->
-        <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js"></script>
         <!-- Firebase Database -->
         <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-database.js"></script>
         <script>
-            // Your web app's Firebase configuration
-            var firebaseConfig = {
-                apiKey: "AIzaSyCbT1_sK2FtA_eoG8lhW-kz9QVkfI6vjDo",
-                authDomain: "room-booking-app-b8e90.firebaseapp.com",
-                databaseURL: "https://room-booking-app-b8e90.firebaseio.com",
-                projectId: "room-booking-app-b8e90",
-                storageBucket: "room-booking-app-b8e90.appspot.com",
-                messagingSenderId: "1050331725452",
-                appId: "1:1050331725452:web:e9c8a8cfdaf489d2a2fd86",
-                measurementId: "G-XV3GH3Y1D2"
-            };
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
+            const firebaseConfig = {
+    apiKey: "AIzaSyChnzRe7q38IGYw7iW7umHTq2T7e7YRXHs",
+    authDomain: "booking-118c8.firebaseapp.com",
+    databaseURL: "https://booking-118c8-default-rtdb.firebaseio.com",
+    projectId: "booking-118c8",
+    storageBucket: "booking-118c8.appspot.com",
+    messagingSenderId: "791333518913",
+    appId: "1:791333518913:web:772689d57cdcd499bf50c0"
+  };
+
+  // Initialize Firebase
+firebase.initializeApp(firebaseConfig);
             // Get a reference to the database service
             var database = firebase.database();
         </script>
