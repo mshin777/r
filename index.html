@@ -2,11 +2,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-    	<title>Room Booking App</title>
-        <!-- Firebase App is needed to use Firebase Database -->
-        <script src="https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js"></script>
-        <!-- Firebase Database -->
-        <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase-database.js"></script>
+    	<title>Room Booking App</title><!-- すべてのFirebaseアプリで必要 -->
+        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+        <!-- Realtime Databaseを利用するには下のSDKを追加で読み込ませます -->
+        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
         <script>
             const firebaseConfig = {
     apiKey: "AIzaSyChnzRe7q38IGYw7iW7umHTq2T7e7YRXHs",
@@ -26,20 +27,17 @@ firebase.initializeApp(firebaseConfig);
 	</head>
 	<body>
     	<h1>Room Booking App</h1>
-        <p>We have 5 rooms. Please select the room you want to book.</p>
-        <div>
-            <button id="roomA" disabled>Room A</button>
-            <button id="roomB" disabled>Room B</button>
-            <button id="roomC" disabled>Room C</button>
-            <button id="roomD" disabled>Room D</button>
-            <button id="roomE" disabled>Room E</button>
+        <p>We have following rooms. Please select the room you want to book.</p>
+        <div id="roomlist">
         </div>
         <!-- Modal -->
-        <div id="modal" style="display:none;">
+        <div id="modal1" style="display:none;">
             <div>
                 <h3>Booking Confirmation</h3>
                 <p>Your booking is successful.</p>
             </div>
+        </div>
+        <div id="modal2" style="display:none;">
             <div>
                 <h3>Error</h3>
                 <p>Something went wrong. Please try again.</p>
@@ -63,51 +61,17 @@ firebase.initializeApp(firebaseConfig);
             </form>
         </div>
         <script type="text/javascript">
-            // Get the buttons
-            var roomA = document.getElementById('roomA');
-            var roomB = document.getElementById('roomB');
-            var roomC = document.getElementById('roomC');
-            var roomD = document.getElementById('roomD');
-            var roomE = document.getElementById('roomE');
-            // Check if the room is booked or not
-            function isBooked(room) {
-                var booked;
-                // Get the data from the database
-                firebase.database().ref('rooms/' + room).once('value').then(function(snapshot) {
-                    booked = snapshot.val().booked;
-                    // If the room is not booked, enable the button
-                    if (!booked) {
-                        document.getElementById(room).disabled = false;
-                    }
-                });
+            var bookingroom="";
+            firebase.database().ref(name + '/rooms').on('child_added', function (obj) {
+                console.log(obj);
+                let button =`<button `+ ((obj.val().booked)?"disabled":"") +` onclick="select('`+ obj.key + `')">`+obj.key+`</button>`;
+                $("#roomlist").append(button);
+            });
+            function select(room){
+                bookingroom=room;
+                $("#roomlist").hide();
+                document.getElementById('bookingForm').style.display = 'block';
             }
-            // Check for all the rooms
-            isBooked('roomA');
-            isBooked('roomB');
-            isBooked('roomC');
-            isBooked('roomD');
-            isBooked('roomE');
-            // Listen for button clicks
-            roomA.addEventListener('click', function() {
-                // Show the booking form
-                document.getElementById('bookingForm').style.display = 'block';
-            });
-            roomB.addEventListener('click', function() {
-                // Show the booking form
-                document.getElementById('bookingForm').style.display = 'block';
-            });
-            roomC.addEventListener('click', function() {
-                // Show the booking form
-                document.getElementById('bookingForm').style.display = 'block';
-            });
-            roomD.addEventListener('click', function() {
-                // Show the booking form
-                document.getElementById('bookingForm').style.display = 'block';
-            });
-            roomE.addEventListener('click', function() {
-                // Show the booking form
-                document.getElementById('bookingForm').style.display = 'block';
-            });
             // Listen for form submission
             document.querySelector('form').addEventListener('submit', function(e) {
                 // Prevent default behavior
@@ -115,32 +79,24 @@ firebase.initializeApp(firebaseConfig);
                 // Get the values from the form
                 var name = document.getElementById('name').value;
                 var email = document.getElementById('email').value;
-                // Find the room to book
-                if (roomA.disabled == false) {
-                    var room = 'roomA';
-                }
-                else if (roomB.disabled == false) {
-                    var room = 'roomB';
-                }
-                else if (roomC.disabled == false) {
-                    var room = 'roomC';
-                }
-                else if (roomD.disabled == false) {
-                    var room = 'roomD';
-                }
-                else if (roomE.disabled == false) {
-                    var room = 'roomE';
-                }
+                var room =bookingroom;
                 // Book the room
+                        $("#bookingForm").hide();
                 firebase.database().ref('rooms/' + room).set({
                     booked: true,
                     user: {
                         name: name,
                         email: email
                     }
+                },function(ee){
+                    if(ee==null){
+                        $("#modal1").show();
+                        
+                    }else{
+                        $("#modal2").show();
+
+                    }
                 });
-                // Show the modal
-                document.getElementById('modal').style.display = 'block';
             });
         </script>
 	</body>
