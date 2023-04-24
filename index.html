@@ -3,7 +3,7 @@
 <html>
 	<head>
     	<title>Room Booking App</title><!-- すべてのFirebaseアプリで必要 -->
-        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
         <!-- Realtime Databaseを利用するには下のSDKを追加で読み込ませます -->
         <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -99,5 +99,111 @@ firebase.initializeApp(firebaseConfig);
                 });
             });
         </script>
+<style>
+h1 {
+  font-size: 2em;
+  text-align: center;
+  color: #4D4D4D;
+  margin-top: 1em;
+}
+
+p {
+  font-size: 1.2em;
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+#roomlist {
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+#roomlist button {
+  padding: 0.5em 1em;
+  font-size: 1.2em;
+  background-color: #0088CC;
+  border: none;
+  color: #FFFFFF;
+  border-radius: 5px;
+  margin-right: 0.5em;
+}
+
+#roomlist button:hover {
+  background-color: #006AA6;
+  cursor: pointer;
+}
+
+#roomlist button[disabled] {
+  background-color: #A4A4A4;
+  color: #FFFFFF;
+  cursor: default;
+}
+
+#modal1, #modal2 {
+  position: fixed;
+  width: 40%;
+  top: 25%;
+  left: 30%;
+  background-color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 5px;
+  padding: 1em;
+}
+
+#modal1 div, #modal2 div {
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+#modal1 h3, #modal2 h3 {
+  font-size: 1.5em;
+  color: #4D4D4D;
+  margin-bottom: 0.5em;
+}
+
+#bookingForm {
+  padding: 1em;
+}
+
+#bookingForm h3 {
+  font-size: 1.5em;
+  color: #4D4D4D;
+  margin-bottom: 1em;
+}
+
+#bookingForm div {
+  margin-bottom: 1em;
+}
+
+#bookingForm label {
+  font-size: 1.2em;
+  color: #4D4D4D;
+  margin-right: 0.5em;
+}
+
+#bookingForm input[type="text"] {
+  padding: 0.5em;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  border: 1px solid #A4A4A4;
+  font-size: 1.2em;
+}
+
+#bookingForm input[type="submit"] {
+  padding: 0.5em 1em;
+  font-size: 1.2em;
+  background-color: #0088CC;
+  border: none;
+  color: #FFFFFF;
+  border-radius: 5px;
+  margin-right: 0.5em;
+}
+
+#bookingForm input[type="submit"]:hover {
+  background-color: #006AA6;
+  cursor: pointer;
+}
+</style>
 	</body>
+
 </html>
